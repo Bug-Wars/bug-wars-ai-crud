@@ -14,14 +14,17 @@ public class AIController {
     }
 
     @GetMapping("/ai")
-    public String getAllAI(){
+    public String getAllAI() {
         return "Hello";
 
     }
+
+    // Json mapper  sets up the key value pairs into a map
+    // Then it uses reflection to create the object and then to populate it.
  @PostMapping("/ai")
  public AIScriptResponse createAIScript(@RequestBody AIScript script){
         aiService.saveAI(script);
-        return null;
+        return new AIScriptResponse(script, "Error message");
  }
 
 }

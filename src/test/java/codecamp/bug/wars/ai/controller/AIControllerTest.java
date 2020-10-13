@@ -1,5 +1,6 @@
 package codecamp.bug.wars.ai.controller;
 
+import codecamp.bug.wars.ai.exceptions.InvalidInputException;
 import codecamp.bug.wars.ai.model.AIScript;
 import codecamp.bug.wars.ai.model.AIScriptResponse;
 import codecamp.bug.wars.ai.service.AIService;
@@ -17,6 +18,12 @@ public class AIControllerTest {
         mockAIService = Mockito.mock(AIService.class);
         aiController = new AIController(mockAIService);
     }
+
+    //Service will have 3 different responses
+    // 1. It was Successful at saving and returns saved AIScript
+    // 2. It was Not Successful and throws an InvalidInputException. Error 400
+    // 3. It was Not Successful and throws a NameUnavailableException. Error 409
+
     @Test
     public void createAIScript_ShouldReturnAIScriptWithIdAndOK(){
         // arrange
@@ -27,10 +34,22 @@ public class AIControllerTest {
         AIScriptResponse response = aiController.createAIScript(new AIScript(null, "Meg", "jump jump"));
 
         // assert
-        assertEquals(1L, response.getId());
-        assertEquals("Meg", response.getName());
-        assertEquals("jump jump", response.getScript());
+        assertEquals(fakeSavedScript, response.getAi());
         assertEquals(null, response.getError());
+    }
+
+    @Test
+    public void createAIScript_ShouldReturn400IfAIScriptRejectedByService(){
+        // arrange
+        AIScript input = new AIScript(null, null, "jump jump");
+        Mockito.when(mockAIService.saveAI(Mockito.any())).thenThrow(new InvalidInputException("Name cannot be null"));
+
+        // act
+        AIScriptResponse response = aiController.createAIScript(input);
+
+        // assert
+        assertEquals(input, response.getAi());
+        assertEquals("Name cannot be null", response.getError());
     }
 
     //save success

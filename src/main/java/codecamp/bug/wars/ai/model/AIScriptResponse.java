@@ -5,12 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
 public class AIScriptResponse {
-
-    private Long id;
-    private String name;
-    private String script;
+    private AIScript ai;
     private String error;
 }
+
