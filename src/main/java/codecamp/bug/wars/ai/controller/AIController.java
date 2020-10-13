@@ -1,9 +1,7 @@
 package codecamp.bug.wars.ai.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import codecamp.bug.wars.ai.model.AIScript;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping
@@ -14,8 +12,8 @@ public class AIController {
 
     }
  @PostMapping("/ai")
- public String saveAI(){
-        return "We save AI";
+ public String saveAI(@RequestBody AIScript script){
+        return "save: " + script.toString();
  }
 
 }
