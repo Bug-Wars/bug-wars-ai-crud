@@ -2,12 +2,10 @@ package codecamp.bug.wars.ai.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class AIScriptTest {
     @Test
     public void firstTest(){
-        AIScript script = new AIScript("john", "move");
+        AIScript script = new AIScript(1L,"john", "move");
         AIScript script2 = new AIScript();
         AIScript script3 = script;
         script2.setName("john");
