@@ -1,30 +1,36 @@
 package codecamp.bug.wars.ai.controller;
 
 import codecamp.bug.wars.ai.model.AIScript;
+import codecamp.bug.wars.ai.model.AIScriptResponse;
 import codecamp.bug.wars.ai.service.AIService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class AIControllerTest {
-    private AIService aiService;
+    private AIService mockAIService;
     private AIController aiController;
     @BeforeEach
     public void setup(){
-        aiService = Mockito.mock(AIService.class);
-        aiController = new AIController(aiService);
+        mockAIService = Mockito.mock(AIService.class);
+        aiController = new AIController(mockAIService);
     }
     @Test
-    public void saveAIScript_ShouldReturnAIScriptWithIdAndOK(){
+    public void createAIScript_ShouldReturnAIScriptWithIdAndOK(){
         // arrange
-        AIScript expected = new AIScript(1L, "Meg", "jump jump");
+        AIScript fakeSavedScript = new AIScript(1L, "Meg", "jump jump");
+        Mockito.when(mockAIService.saveAI(Mockito.any())).thenReturn(fakeSavedScript);
 
-        Mockito.when(aiService.saveAI(Mockito.any())).thenReturn(expected);
-        System.out.println(aiService.saveAI(null));
         // act
+        AIScriptResponse response = aiController.createAIScript(new AIScript(null, "Meg", "jump jump"));
 
         // assert
-
+        assertEquals(1L, response.getId());
+        assertEquals("Meg", response.getName());
+        assertEquals("jump jump", response.getScript());
+        assertEquals(null, response.getError());
     }
 
     //save success

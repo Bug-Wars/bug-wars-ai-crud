@@ -1,6 +1,7 @@
 package codecamp.bug.wars.ai.controller;
 
 import codecamp.bug.wars.ai.model.AIScript;
+import codecamp.bug.wars.ai.model.AIScriptResponse;
 import codecamp.bug.wars.ai.service.AIService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +19,9 @@ public class AIController {
 
     }
  @PostMapping("/ai")
- public String saveAIScript(@RequestBody AIScript script){
+ public AIScriptResponse createAIScript(@RequestBody AIScript script){
         aiService.saveAI(script);
-        return "save: " + script.toString();
+        return null;
  }
 
 }
