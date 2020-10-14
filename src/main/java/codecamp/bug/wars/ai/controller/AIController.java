@@ -1,5 +1,7 @@
 package codecamp.bug.wars.ai.controller;
 
+import codecamp.bug.wars.ai.exceptions.InvalidInputException;
+import codecamp.bug.wars.ai.exceptions.NameUnavailableException;
 import codecamp.bug.wars.ai.model.AIScript;
 import codecamp.bug.wars.ai.model.AIScriptResponse;
 import codecamp.bug.wars.ai.service.AIService;
@@ -23,8 +25,13 @@ public class AIController {
     // Then it uses reflection to create the object and then to populate it.
  @PostMapping("/ai")
  public AIScriptResponse createAIScript(@RequestBody AIScript script){
-        aiService.saveAI(script);
-        return new AIScriptResponse(script, "Error message");
+        try {
+            AIScript savedScript = aiService.saveAI(script);
+            return new AIScriptResponse(savedScript, null);
+        } catch (InvalidInputException | NameUnavailableException e){
+            return new AIScriptResponse(script, e.getMessage());
+        }
+
  }
 
 }

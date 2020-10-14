@@ -1,6 +1,7 @@
 package codecamp.bug.wars.ai.controller;
 
 import codecamp.bug.wars.ai.exceptions.InvalidInputException;
+import codecamp.bug.wars.ai.exceptions.NameUnavailableException;
 import codecamp.bug.wars.ai.model.AIScript;
 import codecamp.bug.wars.ai.model.AIScriptResponse;
 import codecamp.bug.wars.ai.service.AIService;
@@ -10,6 +11,10 @@ import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+// Unit Test
+// We ISOLATE the class that we're testing.
+// Which means we test the REAL VERSION of AIController
+// BUT EVERYTHING AROUND IT IS FAKE
 public class AIControllerTest {
     private AIService mockAIService;
     private AIController aiController;
@@ -25,31 +30,46 @@ public class AIControllerTest {
     // 3. It was Not Successful and throws a NameUnavailableException. Error 409
 
     @Test
-    public void createAIScript_ShouldReturnAIScriptWithIdAndOK(){
+    public void createAIScript_ShouldReturnAIScriptWithIdAndOKHttpStatus(){
         // arrange
-        AIScript fakeSavedScript = new AIScript(1L, "Meg", "jump jump");
-        Mockito.when(mockAIService.saveAI(Mockito.any())).thenReturn(fakeSavedScript);
+        AIScript postBodyInput = new AIScript(null, "Meg", "jump jump");
+        AIScript savedScript = new AIScript(1L, "Meg", "jump jump");
+        AIScriptResponse expected = new AIScriptResponse(savedScript, null);
+        Mockito.when(mockAIService.saveAI(Mockito.any())).thenReturn(savedScript);
 
         // act
-        AIScriptResponse response = aiController.createAIScript(new AIScript(null, "Meg", "jump jump"));
+        AIScriptResponse response = aiController.createAIScript(postBodyInput);
 
         // assert
-        assertEquals(fakeSavedScript, response.getAi());
-        assertEquals(null, response.getError());
+        assertEquals(expected, response);
     }
 
     @Test
     public void createAIScript_ShouldReturn400IfAIScriptRejectedByService(){
         // arrange
-        AIScript input = new AIScript(null, null, "jump jump");
+        AIScript postBodyInput = new AIScript(null, null, "jump jump");
         Mockito.when(mockAIService.saveAI(Mockito.any())).thenThrow(new InvalidInputException("Name cannot be null"));
 
         // act
-        AIScriptResponse response = aiController.createAIScript(input);
+        AIScriptResponse response = aiController.createAIScript(postBodyInput);
 
         // assert
-        assertEquals(input, response.getAi());
+        assertEquals(postBodyInput, response.getAi());
         assertEquals("Name cannot be null", response.getError());
+    }
+
+    @Test
+    public void createAIScript_ShouldReturn409IfServiceThrowsNameNotAvailable(){
+        // arrange
+        AIScript postBodyInput = new AIScript(null, "John", "jump jump");
+        Mockito.when(mockAIService.saveAI(Mockito.any())).thenThrow(new NameUnavailableException("Name not available"));
+
+        // act
+        AIScriptResponse response = aiController.createAIScript(postBodyInput);
+
+        // assert
+        assertEquals(postBodyInput, response.getAi());
+        assertEquals("Name not available", response.getError());
     }
 
     //save success
