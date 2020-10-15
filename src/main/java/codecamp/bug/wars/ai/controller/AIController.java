@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping
 public class AIController {
     private AIService aiService;
+
     public AIController(AIService service){
         aiService = service;
     }

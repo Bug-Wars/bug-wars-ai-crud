@@ -3,12 +3,18 @@ package codecamp.bug.wars.ai.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
+@Entity
 public class AIScript {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(unique=true)
     private String name;
     private String script;
 
