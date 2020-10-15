@@ -9,6 +9,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // Unit Test
@@ -70,6 +73,39 @@ public class AIControllerTest {
         // assert
         assertEquals(postBodyInput, response.getAi());
         assertEquals("Name not available", response.getError());
+    }
+
+    // 2 responses
+    // 1. empty list
+    // 2. list with scripts
+
+    @Test
+    public void getAllAI_ShouldReturnEmptyListIfEmpty(){
+        // arrange
+        List<AIScript> expected = new ArrayList<>();
+        Mockito.when(mockAIService.getAllAI()).thenReturn(expected);
+
+        // act
+        List<AIScript> response = aiController.getAllAI();
+
+        // assert
+        assertEquals(response, expected);
+    }
+
+    @Test
+    public void getAllAI_ShouldReturnListOfAIScripts(){
+        // arrange
+        List<AIScript> expected = new ArrayList<>();
+        expected.add(new AIScript(1L, "Meg", "jump jump"));
+        expected.add(new AIScript(2L, "Kellsey", "move"));
+        Mockito.when(mockAIService.getAllAI()).thenReturn(expected);
+
+        // act
+        List<AIScript> response = aiController.getAllAI();
+
+        // assert
+        assertEquals(response, expected);
+
     }
 
     //save success

@@ -7,6 +7,8 @@ import codecamp.bug.wars.ai.model.AIScriptResponse;
 import codecamp.bug.wars.ai.service.AIService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping
 public class AIController {
@@ -16,9 +18,8 @@ public class AIController {
     }
 
     @GetMapping("/ai")
-    public String getAllAI() {
-        return "Hello";
-
+    public List<AIScript> getAllAI() {
+        return aiService.getAllAI();
     }
 
     // Json mapper  sets up the key value pairs into a map
