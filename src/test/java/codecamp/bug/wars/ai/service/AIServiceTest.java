@@ -8,8 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 class AIServiceTest {
     AiScriptRepository mockRepository;
@@ -56,6 +60,10 @@ class AIServiceTest {
 
     @Test
     public void saveAI_NameAlreadyExists_ShouldThrowError() {
+        // arrange
+        AIScript inDb = new AIScript(1L, "Meg", "turnRight turnLeft");
+        when(mockRepository.findByNameIgnoreCase("Meg")).thenReturn(inDb);
+
         // assert
         NameUnavailableException exception = assertThrows(NameUnavailableException.class, () -> {
             // act
@@ -63,6 +71,44 @@ class AIServiceTest {
         });
         // assert
         assertEquals("An AI Script with that name already exists.", exception.getMessage());
+    }
+
+    @Test
+    public void saveAI_SavesAIScriptAndReturnsUpdatedAIScript() {
+        //arrange
+        AIScript input = new AIScript(null, "Lolita", "turnRight turnLeft");
+        AIScript expected = new AIScript(25L, "Lolita", "turnRight turnLeft");
+        when(mockRepository.save(input)).thenReturn(expected);
+
+        //act
+        AIScript result = service.saveAI(input);
+
+        //assert
+        // there are 2 ways of ensuring that the repository is called.
+        // This is to prevent developers from hard-coding responses
+        // 1. Verifying that the repository method was called.
+        // 2. Running 2 test cases with different expected values.
+        Mockito.verify(mockRepository).save(input);
+        // To verify multiple n calls use this:
+        // Mockito.verify(mockRepository, Mockito.times(n)).save(input);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void getAllAI_callsRepositoryAndReturnsList() {
+        //arrange
+        List<AIScript> expected = Arrays.asList(
+                new AIScript(null, "Meg", "jump jump"),
+                new AIScript(null, "Kellsey", "move move"),
+                new AIScript(null, "Lolita", "turnRight turnLeft"));
+        when(mockRepository.findAll()).thenReturn(expected);
+
+        //act
+        List<AIScript> result = service.getAllAI();
+
+        //assert
+        assertEquals(expected, result);
+        Mockito.verify(mockRepository).findAll();
     }
 
 }

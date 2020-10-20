@@ -30,10 +30,10 @@ public class AIService {
             throw new NameUnavailableException("An AI Script with that name already exists.");
         }
 
-        return null;
+        return repository.save(script);
     }
 
     public List<AIScript> getAllAI() {
-        return null;
+        return repository.findAll();
     }
 }
