@@ -1,4 +1,6 @@
 server.port: 8082
+spring.application.name: bug-wars-ai-crud
+
 
 # this should go in the LOCAL profile
 # Should access at: http://localhost:8082/h2-console/
@@ -13,3 +15,14 @@ spring:
     username: sa
     password:
     driverClassName: org.h2.Driver
+
+---
+spring.profiles: local, default
+eureka:
+  password: password
+  instance:
+    hostname: localhost
+  client:
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}:8761/eureka/
