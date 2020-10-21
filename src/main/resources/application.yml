@@ -4,7 +4,7 @@ spring.application.name: bug-wars-ai-crud
 
 
 ---
-spring.profiles: cloud
+spring.profiles: cloud, default
 spring:
   datasource:
     url: ${DATABASE_URL}
@@ -13,9 +13,9 @@ spring:
     driverClassName: org.postgresql.Driver
 
 
-
+# TO run this set SPRING_PROFILES_ACTIVE to local in Run Configuration
 ---
-spring.profiles: local, default
+spring.profiles: local
 eureka:
   password: password
   instance:
