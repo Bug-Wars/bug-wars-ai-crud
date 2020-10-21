@@ -2,19 +2,17 @@ server.port: 8082
 spring.application.name: bug-wars-ai-crud
 
 
-# this should go in the LOCAL profile
-# Should access at: http://localhost:8082/h2-console/
 
+---
+spring.profiles: cloud
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
-    driverClassName: org.h2.Driver
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+    driverClassName: org.postgresql.Driver
+
+
 
 ---
 spring.profiles: local, default
@@ -26,3 +24,18 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}:8761/eureka/
+
+
+# this should go in the LOCAL profile
+# Should access at: http://localhost:8082/h2-console/
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+
