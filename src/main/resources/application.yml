@@ -5,6 +5,15 @@ spring.application.name: bug-wars-ai-crud
 
 ---
 spring.profiles: cloud, default
+eureka:
+  password: password
+  instance:
+    hostname: bug-wars-eureka.herokuapp.com
+  client:
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}/eureka/
+
 spring:
   datasource:
     url: ${DATABASE_URL}
