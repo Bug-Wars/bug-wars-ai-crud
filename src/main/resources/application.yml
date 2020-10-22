@@ -5,14 +5,14 @@ spring.application.name: bug-wars-ai-crud
 
 ---
 spring.profiles: cloud, default
-#eureka:
-#  password: password
-#  instance:
-#    hostname: bug-wars-eureka.herokuapp.com
-#  client:
-#    fetchRegistry: true
-#    serviceUrl:
-#      defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}/eureka/
+eureka:
+  password: password
+  instance:
+    hostname: bug-wars-eureka.herokuapp.com
+  client:
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}/eureka/
 
 spring:
   datasource:
@@ -22,29 +22,29 @@ spring:
     driverClassName: org.postgresql.Driver
 
 
-## TO run this set SPRING_PROFILES_ACTIVE to local in Run Configuration
-#---
-#spring.profiles: local
-#eureka:
-#  password: password
-#  instance:
-#    hostname: localhost
-#  client:
-#    fetchRegistry: true
-#    serviceUrl:
-#      defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}:8761/eureka/
-#
-#
-## this should go in the LOCAL profile
-## Should access at: http://localhost:8082/h2-console/
-#spring:
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2
-#  datasource:
-#    url: jdbc:h2:mem:testdb
-#    username: sa
-#    password:
-#    driverClassName: org.h2.Driver
+# TO run this set SPRING_PROFILES_ACTIVE to local in Run Configuration
+---
+spring.profiles: local
+eureka:
+  password: password
+  instance:
+    hostname: localhost
+  client:
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}:8761/eureka/
+
+
+# this should go in the LOCAL profile
+# Should access at: http://localhost:8082/h2-console/
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
 
