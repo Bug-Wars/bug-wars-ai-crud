@@ -15,6 +15,9 @@ eureka:
       defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}/eureka/
 
 spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
   datasource:
     url: ${DATABASE_URL}
 #    username: ${JDBC_DATABASE_USERNAME}
