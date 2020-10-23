@@ -1,10 +1,9 @@
 server.port: 8082
 spring.application.name: bug-wars-ai-crud
 
-
-
+# TO run this set SPRING_PROFILES_ACTIVE to cloud in Run Configuration
 ---
-spring.profiles: cloud, default
+spring.profiles: cloud
 eureka:
   password: password
   instance:
@@ -20,14 +19,11 @@ spring:
       ddl-auto: update
   datasource:
     url: ${DATABASE_URL}
-#    username: ${JDBC_DATABASE_USERNAME}
-#    password: ${JDBC_DATABASE_PASSWORD}
     driverClassName: org.postgresql.Driver
 
 
-# TO run this set SPRING_PROFILES_ACTIVE to local in Run Configuration
 ---
-spring.profiles: local
+spring.profiles: local, default
 eureka:
   password: password
   instance:
@@ -39,7 +35,7 @@ eureka:
 
 
 # this should go in the LOCAL profile
-# Should access at: http://localhost:8082/h2-console/
+# Should access at: http://localhost:8082/h2/
 spring:
   h2:
     console:
