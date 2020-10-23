@@ -11,7 +11,7 @@ eureka:
   client:
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}/eureka/
+      defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}/eureka
 
 spring:
   jpa:
