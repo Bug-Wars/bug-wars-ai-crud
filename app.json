@@ -8,7 +8,8 @@
       "description": "URL of the Eureka Server in the form http://<user>:<password>@<host>"
     },
     "DOMAIN_NAME": {
-      "description": "The domain name of this app. For example: <appname>.herokuapp.com"
+      "description": "The domain name of this app. For example: <appname>.herokuapp.com",
+      "value": "bug-wars-ai-crud.herokuapp.com"
     }
   }
 }
