@@ -1,34 +1,33 @@
-server.port: 8082
-spring.application.name: bug-wars-ai-crud
+# Heroku Best Practices For Eureka Client:
+# https://github.com/kissaten/heroku-eureka-client-demo
 
+server.port: ${PORT:8082}
 
-
+# TO run this set SPRING_PROFILES_ACTIVE to cloud in Run Configuration
 ---
-spring.profiles: cloud, default
+spring.profiles: cloud
 eureka:
   password: password
   instance:
-    hostname: bug-wars-eureka.herokuapp.com
+    hostname: ${DOMAIN_NAME}
+    nonSecurePort: 80
   client:
     fetchRegistry: true
+    register-with-eureka: true
     serviceUrl:
-      defaultZone: http://user:${eureka.password}@${eureka.instance.hostname}/eureka
+      defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka/
 
 spring:
   jpa:
     hibernate:
       ddl-auto: update
   datasource:
-#    url: ${DATABASE_URL}
-    url: jdbc:postgresql://ec2-54-160-202-3.compute-1.amazonaws.com:5432/d9155cq2c6gmil?user=lqzrumgmygdscy&password=a647fb09669b6c1c8d0ceca677e2391d8f1fe80e60c6e2c551f2ba51a8fda16d
-#    username: ${JDBC_DATABASE_USERNAME}
-#    password: ${JDBC_DATABASE_PASSWORD}
+    url: ${DATABASE_URL}
     driverClassName: org.postgresql.Driver
 
 
-# TO run this set SPRING_PROFILES_ACTIVE to local in Run Configuration
 ---
-spring.profiles: local
+spring.profiles: local, default
 eureka:
   password: password
   instance:
@@ -40,7 +39,7 @@ eureka:
 
 
 # this should go in the LOCAL profile
-# Should access at: http://localhost:8082/h2-console/
+# Should access at: http://localhost:8082/h2/
 spring:
   h2:
     console:
