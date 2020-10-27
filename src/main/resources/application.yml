@@ -16,7 +16,6 @@ eureka:
     serviceUrl:
       defaultZone: ${EUREKA_URL:http://user:password@localhost:8761}/eureka/
 
-
 spring:
   jpa:
     hibernate:
