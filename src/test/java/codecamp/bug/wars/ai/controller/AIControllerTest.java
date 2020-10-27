@@ -8,6 +8,8 @@ import codecamp.bug.wars.ai.service.AIService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -41,10 +43,11 @@ public class AIControllerTest {
         Mockito.when(mockAIService.saveAI(Mockito.any())).thenReturn(savedScript);
 
         // act
-        AIScriptResponse response = aiController.createAIScript(postBodyInput);
+        ResponseEntity<AIScriptResponse> response = aiController.createAIScript(postBodyInput);
 
         // assert
-        assertEquals(expected, response);
+        assertEquals(expected, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
@@ -54,11 +57,13 @@ public class AIControllerTest {
         Mockito.when(mockAIService.saveAI(Mockito.any())).thenThrow(new InvalidInputException("Name cannot be null"));
 
         // act
-        AIScriptResponse response = aiController.createAIScript(postBodyInput);
+        ResponseEntity<AIScriptResponse> responseEntity = aiController.createAIScript(postBodyInput);
+        AIScriptResponse response = responseEntity.getBody();
 
         // assert
         assertEquals(postBodyInput, response.getAi());
         assertEquals("Name cannot be null", response.getError());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
@@ -68,11 +73,13 @@ public class AIControllerTest {
         Mockito.when(mockAIService.saveAI(Mockito.any())).thenThrow(new NameUnavailableException("Name not available"));
 
         // act
-        AIScriptResponse response = aiController.createAIScript(postBodyInput);
+        ResponseEntity<AIScriptResponse> responseEntity = aiController.createAIScript(postBodyInput);
+        AIScriptResponse response = responseEntity.getBody();
 
         // assert
         assertEquals(postBodyInput, response.getAi());
         assertEquals("Name not available", response.getError());
+        assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
     }
 
     // 2 responses
@@ -86,10 +93,11 @@ public class AIControllerTest {
         Mockito.when(mockAIService.getAllAI()).thenReturn(expected);
 
         // act
-        List<AIScript> response = aiController.getAllAI();
+        ResponseEntity<List<AIScript>> response = aiController.getAllAI();
 
         // assert
-        assertEquals(response, expected);
+        assertEquals(expected, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
@@ -101,10 +109,11 @@ public class AIControllerTest {
         Mockito.when(mockAIService.getAllAI()).thenReturn(expected);
 
         // act
-        List<AIScript> response = aiController.getAllAI();
+        ResponseEntity<List<AIScript>> response = aiController.getAllAI();
 
         // assert
-        assertEquals(response, expected);
+        assertEquals(expected, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
 
     }
 
