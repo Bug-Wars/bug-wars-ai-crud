@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8080"})
+@CrossOrigin(origins = {"http://localhost:4200", "http://localhost:8081", "http://bug-wars.herokuapp.com/api/ai"})
 @RestController
 public class AIController {
     private AIService aiService;
