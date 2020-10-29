@@ -2,6 +2,8 @@
 This microservice stores all AI Script objects in a database.  In local environment, this microservice creates an H2 in-memory 
 database.  When deployed to Heroku, the microservice connects to a PostGres database hosted in the cloud.
 
+http://bug-wars-ai-crud.herokuapp.com
+
 ## `GET /ai`
 Returns array of AI Script objects
 
