@@ -5,12 +5,12 @@ server.port: ${PORT:8082}
 
 # TO run this set SPRING_PROFILES_ACTIVE to cloud in Run Configuration
 ---
-spring.profiles: cloud
+spring.profiles: cloud, default
 eureka:
   password: password
   instance:
     hostname: ${DOMAIN_NAME}
-    nonSecurePort: 80
+    non-secure-port: 80
   client:
     fetchRegistry: true
     register-with-eureka: true
@@ -27,7 +27,7 @@ spring:
 
 
 ---
-spring.profiles: local, default
+spring.profiles: local
 eureka:
   password: password
   instance:
