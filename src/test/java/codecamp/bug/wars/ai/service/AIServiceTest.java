@@ -48,11 +48,55 @@ class AIServiceTest {
     }
 
     @Test
+    public void saveAI_emptyScriptShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.saveAI(new AIScript(null, "Name", ""));
+        });
+        // assert
+        assertEquals("AI Script is required, cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void saveAI_whitespaceScriptShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.saveAI(new AIScript(null, "Name", "    "));
+        });
+        // assert
+        assertEquals("AI Script is required, cannot be empty.", exception.getMessage());
+    }
+
+    @Test
     public void saveAI_nullNameShouldThrowError() {
         // assert
         InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
             // act
             service.saveAI(new AIScript(null, null, "jump jump"));
+        });
+        // assert
+        assertEquals("No AI Script name was assigned.", exception.getMessage());
+    }
+
+    @Test
+    public void saveAI_emptyNameShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.saveAI(new AIScript(null, "", "jump jump"));
+        });
+        // assert
+        assertEquals("No AI Script name was assigned.", exception.getMessage());
+    }
+
+    @Test
+    public void saveAI_whitespaceNameShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.saveAI(new AIScript(null, "     ", "jump jump"));
         });
         // assert
         assertEquals("No AI Script name was assigned.", exception.getMessage());
@@ -68,6 +112,21 @@ class AIServiceTest {
         NameUnavailableException exception = assertThrows(NameUnavailableException.class, () -> {
             // act
             service.saveAI(new AIScript(null, "Meg", "jump jump"));
+        });
+        // assert
+        assertEquals("An AI Script with that name already exists.", exception.getMessage());
+    }
+
+    @Test
+    public void saveAI_TrimmedNameAlreadyExists_ShouldThrowError() {
+        // arrange
+        AIScript inDb = new AIScript(1L, "Meg", "turnRight turnLeft");
+        when(mockRepository.findByNameIgnoreCase("Meg")).thenReturn(inDb);
+
+        // assert
+        NameUnavailableException exception = assertThrows(NameUnavailableException.class, () -> {
+            // act
+            service.saveAI(new AIScript(null, "   Meg\t", "jump jump"));
         });
         // assert
         assertEquals("An AI Script with that name already exists.", exception.getMessage());
