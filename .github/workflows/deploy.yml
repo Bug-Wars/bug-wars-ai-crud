@@ -33,4 +33,5 @@ jobs:
       - name: Deploy to Heroku
         run: |
           heroku plugins:install java
+          heroku buildpacks:clear --app bug-wars-ai-crud
           heroku deploy:jar target/bug-wars-ai-crud-0.0.1-SNAPSHOT.jar --app bug-wars-ai-crud
