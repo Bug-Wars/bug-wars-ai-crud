@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/bug-wars-ai-crud-0.0.1-SNAPSHOT.jar
+web: java $JAVA_OPTS -jar target/bug-wars-ai-crud*.jar
