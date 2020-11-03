@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 
 // Unit Test
 // We ISOLATE the class that we're testing.
@@ -115,6 +116,51 @@ public class AIControllerTest {
         assertEquals(expected, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
+    }
+
+    @Test
+    public void updateAIScript_ShouldCallService_ReturnUpdatedRecord() {
+        AIScript postBodyInput = new AIScript(1L, "Some Name", "jump jump");
+        Mockito.when(mockAIService.updateAI(postBodyInput, 1L)).thenReturn(postBodyInput);
+
+        ResponseEntity<AIScriptResponse> response = aiController.updateAIScript(postBodyInput, 1L);
+
+        verify(mockAIService).updateAI(postBodyInput, 1L);
+        assertEquals(postBodyInput, response.getBody().getAi());
+        assertEquals(null, response.getBody().getError());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    public void updateAIScript_ShouldReturn400IfAIScriptRejectedByService(){
+        // arrange
+        AIScript postBodyInput = new AIScript(null, null, "jump jump");
+        Mockito.when(mockAIService.updateAI(postBodyInput, 1L)).thenThrow(new InvalidInputException("Name cannot be null"));
+
+        // act
+        ResponseEntity<AIScriptResponse> responseEntity = aiController.updateAIScript(postBodyInput, 1L);
+        AIScriptResponse response = responseEntity.getBody();
+
+        // assert
+        assertEquals(postBodyInput, response.getAi());
+        assertEquals("Name cannot be null", response.getError());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void updateAIScript_ShouldReturn409IfServiceThrowsNameNotAvailable(){
+        // arrange
+        AIScript postBodyInput = new AIScript(null, "John", "jump jump");
+        Mockito.when(mockAIService.updateAI(postBodyInput, 1L)).thenThrow(new NameUnavailableException("Name not available"));
+
+        // act
+        ResponseEntity<AIScriptResponse> responseEntity = aiController.updateAIScript(postBodyInput, 1L);
+        AIScriptResponse response = responseEntity.getBody();
+
+        // assert
+        assertEquals(postBodyInput, response.getAi());
+        assertEquals("Name not available", response.getError());
+        assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
     }
 
     //save success

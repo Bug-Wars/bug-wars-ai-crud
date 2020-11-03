@@ -169,5 +169,133 @@ class AIServiceTest {
         assertEquals(expected, result);
         Mockito.verify(mockRepository).findAll();
     }
+//  -----------------------------------------------------------------------------------------
+    @Test
+    public void updateAI_nullInputShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.updateAI(null, 1L);
+        });
+        // assert
+        assertEquals("AI Script is required, cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void updateAI_nullScriptShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.updateAI(new AIScript(null, "Name", null), 1L);
+        });
+        // assert
+        assertEquals("AI Script is required, cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void updateAI_emptyScriptShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.updateAI(new AIScript(null, "Name", ""), 1L);
+        });
+        // assert
+        assertEquals("AI Script is required, cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void updateAI_whitespaceScriptShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.updateAI(new AIScript(null, "Name", "    "), 1L);
+        });
+        // assert
+        assertEquals("AI Script is required, cannot be empty.", exception.getMessage());
+    }
+
+    @Test
+    public void updateAI_nullNameShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.updateAI(new AIScript(null, null, "jump jump"), 1L);
+        });
+        // assert
+        assertEquals("No AI Script name was assigned.", exception.getMessage());
+    }
+
+    @Test
+    public void updateAI_emptyNameShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.updateAI(new AIScript(null, "", "jump jump"), 1L);
+        });
+        // assert
+        assertEquals("No AI Script name was assigned.", exception.getMessage());
+    }
+
+    @Test
+    public void updateAI_whitespaceNameShouldThrowError() {
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            service.updateAI(new AIScript(null, "     ", "jump jump"), 1L);
+        });
+        // assert
+        assertEquals("No AI Script name was assigned.", exception.getMessage());
+    }
+
+    @Test
+    public void updateAI_NameAlreadyExists_ShouldThrowError() {
+        // arrange
+        AIScript inDb = new AIScript(1L, "Meg", "turnRight turnLeft");
+        when(mockRepository.findByNameIgnoreCase("Meg")).thenReturn(inDb);
+
+        // assert
+        NameUnavailableException exception = assertThrows(NameUnavailableException.class, () -> {
+            // act
+            service.updateAI(new AIScript(null, "Meg", "jump jump"), 25L);
+        });
+        // assert
+        assertEquals("An AI Script with that name already exists.", exception.getMessage());
+    }
+
+    @Test
+    public void updateAI_TrimmedNameAlreadyExists_ShouldThrowError() {
+        // arrange
+        AIScript inDb = new AIScript(1L, "Meg", "turnRight turnLeft");
+        when(mockRepository.findByNameIgnoreCase("Meg")).thenReturn(inDb);
+
+        // assert
+        NameUnavailableException exception = assertThrows(NameUnavailableException.class, () -> {
+            // act
+            service.updateAI(new AIScript(null, "   Meg\t", "jump jump"), 25L);
+        });
+        // assert
+        assertEquals("An AI Script with that name already exists.", exception.getMessage());
+    }
+
+    @Test
+    public void updateAI_SavesAIScriptAndReturnsUpdatedAIScript() {
+        //arrange
+        AIScript input = new AIScript(25L, "Lolita", "turnRight turnLeft");
+        AIScript expected = new AIScript(25L, "Lolita", "turnRight turnLeft");
+        when(mockRepository.save(input)).thenReturn(expected);
+
+        //act
+        AIScript result = service.updateAI(input, 25L);
+
+        //assert
+        // there are 2 ways of ensuring that the repository is called.
+        // This is to prevent developers from hard-coding responses
+        // 1. Verifying that the repository method was called.
+        // 2. Running 2 test cases with different expected values.
+        Mockito.verify(mockRepository).save(input);
+        // To verify multiple n calls use this:
+        // Mockito.verify(mockRepository, Mockito.times(n)).save(input);
+        assertEquals(expected, result);
+    }
 
 }

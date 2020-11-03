@@ -16,7 +16,7 @@ import java.util.List;
 public class AIController {
     private AIService aiService;
 
-    public AIController(AIService service){
+    public AIController(AIService service) {
         aiService = service;
     }
 
@@ -27,20 +27,33 @@ public class AIController {
 
     // Json mapper  sets up the key value pairs into a map
     // Then it uses reflection to create the object and then to populate it.
- @PostMapping("/ai")
- public ResponseEntity<AIScriptResponse> createAIScript(@RequestBody AIScript script){
+    @PostMapping("/ai")
+    public ResponseEntity<AIScriptResponse> createAIScript(@RequestBody AIScript script) {
         try {
             AIScript savedScript = aiService.saveAI(script);
             return ResponseEntity.ok(new AIScriptResponse(savedScript, null));
-        } catch (InvalidInputException e){
+        } catch (InvalidInputException e) {
 
             return new ResponseEntity(new AIScriptResponse(script, e.getMessage()), HttpStatus.BAD_REQUEST);
-        }
-        catch (NameUnavailableException e){
+        } catch (NameUnavailableException e) {
 
-        return new ResponseEntity(new AIScriptResponse(script, e.getMessage()), HttpStatus.CONFLICT);
+            return new ResponseEntity(new AIScriptResponse(script, e.getMessage()), HttpStatus.CONFLICT);
         }
+    }
 
- }
+    @PutMapping("/ai/{id}")
+    public ResponseEntity<AIScriptResponse> updateAIScript(@RequestBody AIScript script, @PathVariable Long id){
+        try {
+            AIScript updatedScript = aiService.updateAI(script, id);
+            return ResponseEntity.ok(new AIScriptResponse(updatedScript, null));
+        } catch (InvalidInputException e) {
+
+            return new ResponseEntity(new AIScriptResponse(script, e.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (NameUnavailableException e) {
+
+            return new ResponseEntity(new AIScriptResponse(script, e.getMessage()), HttpStatus.CONFLICT);
+        }
+    }
+
 
 }
