@@ -18,11 +18,8 @@ public class AIService {
     }
 
     public AIScript saveAI(AIScript script) {
-        if (script == null || StringUtils.isBlank(script.getScript())) {
-            throw new InvalidInputException("AI Script is required, cannot be empty.");
-        } else if (StringUtils.isBlank(script.getName())) {
-            throw new InvalidInputException("No AI Script name was assigned.");
-        }
+        validateScript(script);
+
         script.setName(script.getName().trim());
         AIScript dbScript = repository.findByNameIgnoreCase(script.getName());
         if (dbScript != null) {
@@ -32,7 +29,28 @@ public class AIService {
         return repository.save(script);
     }
 
+    public AIScript updateAI(AIScript script, Long id){
+        validateScript(script);
+
+        script.setName(script.getName().trim());
+        script.setId(id);
+        AIScript dbScript = repository.findByNameIgnoreCase(script.getName());
+        if (dbScript != null && dbScript.getId() != id) {
+            throw new NameUnavailableException("An AI Script with that name already exists.");
+        }
+
+        return repository.save(script);
+    }
+
     public List<AIScript> getAllAI() {
         return repository.findAll();
+    }
+
+    private void validateScript(AIScript script){
+        if (script == null || StringUtils.isBlank(script.getScript())) {
+            throw new InvalidInputException("AI Script is required, cannot be empty.");
+        } else if (StringUtils.isBlank(script.getName())) {
+            throw new InvalidInputException("No AI Script name was assigned.");
+        }
     }
 }
