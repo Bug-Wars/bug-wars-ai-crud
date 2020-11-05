@@ -20,6 +20,11 @@ public class AIController {
         aiService = service;
     }
 
+    @GetMapping("/ai/{id}")
+    public ResponseEntity<AIScript> getAIById(@PathVariable Long id){
+        return ResponseEntity.ok(aiService.getAIById(id));
+    }
+
     @GetMapping("/ai")
     public ResponseEntity<List<AIScript>> getAllAI() {
         return ResponseEntity.ok(aiService.getAllAI());
