@@ -1,5 +1,6 @@
 package codecamp.bug.wars.ai.service;
 
+import codecamp.bug.wars.ai.exceptions.IdDoesNotExistException;
 import codecamp.bug.wars.ai.exceptions.InvalidInputException;
 import codecamp.bug.wars.ai.exceptions.NameUnavailableException;
 import codecamp.bug.wars.ai.model.AIScript;
@@ -40,6 +41,16 @@ public class AIService {
         }
 
         return repository.save(script);
+    }
+
+    public AIScript getAIById(Long id){
+        AIScript returnScript = repository.findAIById(id);
+        if(returnScript == null){
+            throw new IdDoesNotExistException("There is no AIScript with that ID.");
+        }
+        else{
+            return returnScript;
+        }
     }
 
     public List<AIScript> getAllAI() {

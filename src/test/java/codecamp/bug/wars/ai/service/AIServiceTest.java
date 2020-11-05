@@ -1,5 +1,6 @@
 package codecamp.bug.wars.ai.service;
 
+import codecamp.bug.wars.ai.exceptions.IdDoesNotExistException;
 import codecamp.bug.wars.ai.exceptions.InvalidInputException;
 import codecamp.bug.wars.ai.exceptions.NameUnavailableException;
 import codecamp.bug.wars.ai.model.AIScript;
@@ -296,6 +297,34 @@ class AIServiceTest {
         // To verify multiple n calls use this:
         // Mockito.verify(mockRepository, Mockito.times(n)).save(input);
         assertEquals(expected, result);
+    }
+
+    @Test
+    public void getAIById_ReturnsAIScriptWithCorrespondingId(){
+//        arrange
+        AIScript expected = new AIScript(1L, "Ramon", "jump jump jump");
+        when(mockRepository.findAIById(1L)).thenReturn(expected);
+
+        //act
+        AIScript result = service.getAIById(1L);
+
+        //assert
+        Mockito.verify(mockRepository).findAIById(1L);
+        assertEquals(expected, result);
+    }
+
+    @Test
+    public void getAIById_ThrowsExceptionWhenIdDoesNotExist(){
+//        arrange
+        when(mockRepository.findAIById(1L)).thenReturn(null);
+
+        // assert
+        IdDoesNotExistException exception = assertThrows(IdDoesNotExistException.class, () -> {
+            // act
+            service.getAIById(1L);
+        });
+        // assert
+        assertEquals("There is no AIScript with that ID.", exception.getMessage());
     }
 
 }
