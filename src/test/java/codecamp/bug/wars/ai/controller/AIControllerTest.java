@@ -1,5 +1,6 @@
 package codecamp.bug.wars.ai.controller;
 
+import codecamp.bug.wars.ai.exceptions.IdDoesNotExistException;
 import codecamp.bug.wars.ai.exceptions.InvalidInputException;
 import codecamp.bug.wars.ai.exceptions.NameUnavailableException;
 import codecamp.bug.wars.ai.model.AIScript;
@@ -163,6 +164,37 @@ public class AIControllerTest {
         assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
     }
 
+    @Test
+    public void getAiById_ShouldReturn404IfServiceThrowsIdDoesNotExist(){
+        // arrange
+
+        Mockito.when(mockAIService.getAIById(1L)).thenThrow(new IdDoesNotExistException("An AIScript with that ID does not exist"));
+
+        // act
+        ResponseEntity<AIScriptResponse> responseEntity = aiController.getAIById(1L);
+//        AIScriptResponse response = responseEntity.getBody();
+
+        // assert
+        assertEquals("An AIScript with that ID does not exist", responseEntity.getBody().getError());
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+    }
+
+    @Test
+    public void getAiById_ShouldReturnAIWithCorrespondingId(){
+        // arrange
+        AIScript existing = new AIScript(1L, "John", "turnleft move jump");
+        Mockito.when(mockAIService.getAIById(1L)).thenReturn(existing);
+        AIScriptResponse expectedScriptResponse = new AIScriptResponse(existing, null);
+        ResponseEntity<AIScriptResponse> expected = new ResponseEntity<AIScriptResponse>(expectedScriptResponse, HttpStatus.OK);
+
+        // act
+        ResponseEntity<AIScriptResponse> responseEntity = aiController.getAIById(1L);
+//        AIScriptResponse response = responseEntity.getBody();
+
+        // assert
+        assertEquals(expected, responseEntity);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }
     //save success
     //"An AI Script with that name already exists."
     //

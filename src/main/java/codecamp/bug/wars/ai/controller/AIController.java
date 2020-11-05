@@ -1,5 +1,6 @@
 package codecamp.bug.wars.ai.controller;
 
+import codecamp.bug.wars.ai.exceptions.IdDoesNotExistException;
 import codecamp.bug.wars.ai.exceptions.InvalidInputException;
 import codecamp.bug.wars.ai.exceptions.NameUnavailableException;
 import codecamp.bug.wars.ai.model.AIScript;
@@ -21,8 +22,14 @@ public class AIController {
     }
 
     @GetMapping("/ai/{id}")
-    public ResponseEntity<AIScript> getAIById(@PathVariable Long id){
-        return ResponseEntity.ok(aiService.getAIById(id));
+    public ResponseEntity<AIScriptResponse> getAIById(@PathVariable Long id){
+        try{
+           AIScript retrieved = aiService.getAIById(id);
+            return ResponseEntity.ok(new AIScriptResponse(retrieved, null));
+        }catch(IdDoesNotExistException e){
+            return new ResponseEntity(new AIScriptResponse( null, e.getMessage()), HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping("/ai")
