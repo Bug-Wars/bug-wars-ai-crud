@@ -28,6 +28,47 @@ Returns array of AI Script objects
 ]
 ```
 
+## `GET /ai/{id}`
+Returns array of AI Script objects by id
+* Returns AIScript with corresponding id
+* Returns error exception message when id does not exist
+
+### Response Body
+```json
+[
+  {
+    "id": "1",
+    "name": "Mover",
+    "script": "move move move"
+  },
+  {
+    "id": "2",
+    "name": "Shaker",
+    "script": "turnRight turnLeft"
+  },
+  {
+    "id": "3",
+    "name": "Attacker",
+    "script": "attack attack attack"
+  }
+]
+```
+### Request Body for id that does not exist
+```json
+{
+  "id": "4",
+  "name": "Movttaker",
+  "script": "move attack move"
+}
+```
+### Response Body
+```json
+{
+  "ai": "null",
+  "error": "There is no AIScript with that ID"
+}
+```
+
 ## `POST /ai`
 Attempts to save a new AI Script.
 * Returns 400 if any fields are null
