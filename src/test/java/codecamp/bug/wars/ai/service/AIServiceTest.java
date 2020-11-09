@@ -1,6 +1,6 @@
 package codecamp.bug.wars.ai.service;
 
-import codecamp.bug.wars.ai.exceptions.IdDoesNotExistException;
+import codecamp.bug.wars.ai.exceptions.AIScriptNotFoundException;
 import codecamp.bug.wars.ai.exceptions.InvalidInputException;
 import codecamp.bug.wars.ai.exceptions.NameUnavailableException;
 import codecamp.bug.wars.ai.model.AIScript;
@@ -319,7 +319,7 @@ class AIServiceTest {
         when(mockRepository.findAIById(1L)).thenReturn(null);
 
         // assert
-        IdDoesNotExistException exception = assertThrows(IdDoesNotExistException.class, () -> {
+        AIScriptNotFoundException exception = assertThrows(AIScriptNotFoundException.class, () -> {
             // act
             service.getAIById(1L);
         });
