@@ -50,7 +50,7 @@ class AssemblerTest {
     }
 
     @Test
-    public void assemble_shouldReturnAnArrayOfObjectCodeGivenMultipleCommands(){
+    public void assemble_shouldReturnAnArrayOfObjectCodeGivenMultipleSingularCommands(){
         //arrange
         List<BugCommand> input = Arrays.asList(
                 new BugCommand(null, NOOP, null, null),
@@ -72,10 +72,10 @@ class AssemblerTest {
     }
 
     @Test
-    public void assemble_GOTO_shouldReturnObjectCodeWithTargetLabel(){
+    public void assemble_GOTO_shouldReturnObjectCodeWithTargetLabelIndex(){
         //arrange
         List<BugCommand> input = Arrays.asList(
-                new BugCommand("ABC", GOTO, null, "ABC")
+                new BugCommand("START", GOTO, null, "START")
         );
 
         //act
@@ -85,10 +85,85 @@ class AssemblerTest {
         assertEquals(Arrays.asList(20,0), objectCode);
     }
 
+    @Test
+    public void assemble_IF_ENEMY_shouldReturnObjectCodeWithTargetLabelIndex(){
+        //arrange
+        List<BugCommand> input = Arrays.asList(
+                new BugCommand("START", IF_ENEMY, 1, "START")
+        );
 
+        //act
+        List<Integer> objectCode = assembler.assemble(input);
 
+        //assert
+        assertEquals(Arrays.asList(24,1,0), objectCode);
+    }
 
+    @Test
+    public void assemble_IF_FOOD_shouldReturnObjectCodeWithTargetLabelIndex(){
+        //arrange
+        List<BugCommand> input = Arrays.asList(
+                new BugCommand("ABC", IF_FOOD, 2, "ABC")
+        );
 
+        //act
+        List<Integer> objectCode = assembler.assemble(input);
+
+        //assert
+        assertEquals(Arrays.asList(23,2,0), objectCode);
+    }
+
+    @Test
+    public void assemble_IF_WALL_shouldReturnObjectCodeWithTargetLabelIndex(){
+        //arrange
+        List<BugCommand> input = Arrays.asList(
+                new BugCommand("ABC", IF_WALL, 2, "ABC")
+        );
+
+        //act
+        List<Integer> objectCode = assembler.assemble(input);
+
+        //assert
+        assertEquals(Arrays.asList(22,2,0), objectCode);
+    }
+
+    @Test
+    public void assemble_IF_FRIEND_shouldReturnObjectCodeWithTargetLabelIndex(){
+        //arrange
+        List<BugCommand> input = Arrays.asList(
+                new BugCommand("ABC", IF_FRIEND, 2, "ABC")
+        );
+
+        //act
+        List<Integer> objectCode = assembler.assemble(input);
+
+        //assert
+        assertEquals(Arrays.asList(21,2,0), objectCode);
+    }
+
+    @Test
+    public void assemble_shouldReturnObjectCodeGivenMultipleCommands(){
+        //arrange
+        List<BugCommand> input = Arrays.asList(
+                new BugCommand("START", IF_ENEMY, 1, "ATTACK"),
+                new BugCommand(null, IF_ENEMY, 10, "PURSUE"),
+                new BugCommand(null, TURN_LEFT, null, null),
+                new BugCommand(null, GOTO, null, "START"),
+                new BugCommand("ATTACK", ATTACK, null, null),
+                new BugCommand(null, NOOP, null, null),
+                new BugCommand(null, NOOP, null, null),
+                new BugCommand(null, GOTO, null, "START"),
+                new BugCommand("PURSUE", MOVE, null, null),
+                new BugCommand(null, NOOP, null, null),
+                new BugCommand(null, GOTO, null, "START")
+        );
+
+        //act
+        List<Integer> objectCode = assembler.assemble(input);
+
+        //assert
+        assertEquals(Arrays.asList(24,1,9,24,10,14,3,20,0,1,0,0,20,0,2,0,20,0), objectCode);
+    }
 
 
 }
