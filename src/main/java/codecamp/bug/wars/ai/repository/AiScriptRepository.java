@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AiScriptRepository extends JpaRepository<AIScript, Long> {
     AIScript findByNameIgnoreCase(String name);
-    AIScript findAIById(Long id);
 }
 
 // To create a database repository you need 3 things

@@ -9,7 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableDiscoveryClient
 @EnableEurekaClient
 @SpringBootApplication
-@ComponentScan({"codecamp.bug.wars.ai.service.compiler.Compiler"})
 public class BugWarsAiCrudApplication {
 
 	public static void main(String[] args) {
