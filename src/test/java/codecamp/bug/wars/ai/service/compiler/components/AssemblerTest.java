@@ -71,6 +71,20 @@ class AssemblerTest {
         assertEquals(Arrays.asList(0,1,2,3,4,5,6,7), objectCode);
     }
 
+    @Test
+    public void assemble_GOTO_shouldReturnObjectCodeWithTargetLabel(){
+        //arrange
+        List<BugCommand> input = Arrays.asList(
+                new BugCommand("ABC", GOTO, null, "ABC")
+        );
+
+        //act
+        List<Integer> objectCode = assembler.assemble(input);
+
+        //assert
+        assertEquals(Arrays.asList(20,0), objectCode);
+    }
+
 
 
 
