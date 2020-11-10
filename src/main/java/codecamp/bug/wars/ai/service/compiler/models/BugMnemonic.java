@@ -19,7 +19,7 @@ public enum BugMnemonic {
 
     public int getObjectCodeRepresentation() { return objectCodeRepresentation; }
 
-    BugMnemonic(int objectCodeRepresentation) {
+    private BugMnemonic(int objectCodeRepresentation) {
         this.objectCodeRepresentation = objectCodeRepresentation;
     }
 
