@@ -15,12 +15,12 @@ public enum BugMnemonic {
     IF_FOOD(23),
     IF_ENEMY(24);
 
-    private int objectCodeRepresentation;
+    private int opCode;
 
-    public int getObjectCodeRepresentation() { return objectCodeRepresentation; }
+    public int getOpCode() { return opCode; }
 
-    private BugMnemonic(int objectCodeRepresentation) {
-        this.objectCodeRepresentation = objectCodeRepresentation;
+    private BugMnemonic(int opCode) {
+        this.opCode = opCode;
     }
 
 }
