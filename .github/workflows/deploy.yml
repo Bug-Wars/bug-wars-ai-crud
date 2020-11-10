@@ -21,7 +21,7 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
         #Build and run test fro Spring Boot
-      - name: Build Sprint Boot Project with Maven
+      - name: Build Spring Boot Project with Maven
         run: mvn -B package --file pom.xml
       - name: Login to Heroku
         uses: akhileshns/heroku-deploy@v3.6.8
