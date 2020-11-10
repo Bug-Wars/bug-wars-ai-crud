@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -303,20 +304,20 @@ class AIServiceTest {
     public void getAIById_ReturnsAIScriptWithCorrespondingId(){
 //        arrange
         AIScript expected = new AIScript(1L, "Ramon", "jump jump jump");
-        when(mockRepository.findAIById(1L)).thenReturn(expected);
+        when(mockRepository.findById(1L)).thenReturn(Optional.of(expected));
 
         //act
         AIScript result = service.getAIById(1L);
 
         //assert
-        Mockito.verify(mockRepository).findAIById(1L);
+        Mockito.verify(mockRepository).findById(1L);
         assertEquals(expected, result);
     }
 
     @Test
     public void getAIById_ThrowsExceptionWhenIdDoesNotExist(){
 //        arrange
-        when(mockRepository.findAIById(1L)).thenReturn(null);
+        when(mockRepository.findById(1L)).thenReturn(Optional.empty());
 
         // assert
         AIScriptNotFoundException exception = assertThrows(AIScriptNotFoundException.class, () -> {

@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AIService {
@@ -44,13 +45,11 @@ public class AIService {
     }
 
     public AIScript getAIById(Long id){
-        AIScript returnScript = repository.findAIById(id);
-        if(returnScript == null){
+        Optional<AIScript> scriptOptional = repository.findById(id);
+        if(scriptOptional.isEmpty()){
             throw new AIScriptNotFoundException("There is no AIScript with that ID.");
         }
-        else{
-            return returnScript;
-        }
+        return scriptOptional.get();
     }
 
     public List<AIScript> getAllAI() {
