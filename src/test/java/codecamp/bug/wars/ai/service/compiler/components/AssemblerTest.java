@@ -18,7 +18,6 @@ class AssemblerTest {
     @BeforeEach()
     public void setup(){
         assembler = new Assembler();
-
     }
     @Test
     public void assemble_shouldReturnEmptyListWhenGivenEmptyProgram(){
