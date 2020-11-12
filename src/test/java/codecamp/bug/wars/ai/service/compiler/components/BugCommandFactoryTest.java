@@ -1,4 +1,6 @@
 package codecamp.bug.wars.ai.service.compiler.components;
+
+import codecamp.bug.wars.ai.exceptions.InvalidInputException;
 import codecamp.bug.wars.ai.service.compiler.models.BugCommand;
 import codecamp.bug.wars.ai.service.compiler.models.BugMnemonic;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class BugCommandFactoryTest {
     BugCommandFactory bugCommandFactory;
@@ -134,6 +137,67 @@ class BugCommandFactoryTest {
                 new BugCommand(null, BugMnemonic.IF_WALL, 1, null)
         );
         assertEquals(expected, res);
+    }
+
+    @Test
+    public void create_ifFood_shouldReturnBugCommandWithParameter(){
+        List<BugCommand> res = bugCommandFactory.create("ifFood", 10);
+        List<BugCommand> expected = Arrays.asList(
+                new BugCommand(null, BugMnemonic.IF_FOOD, 10, null)
+        );
+        assertEquals(expected, res);
+    }
+    @Test
+    public void create_ifFood_shouldReturnBugCommandWithDefaultParameter(){
+        List<BugCommand> res = bugCommandFactory.create("ifFood", null);
+        List<BugCommand> expected = Arrays.asList(
+                new BugCommand(null, BugMnemonic.IF_FOOD, 1, null)
+        );
+        assertEquals(expected, res);
+    }
+
+    @Test
+    public void create_ifEnemy_shouldReturnBugCommandWithParameter(){
+        List<BugCommand> res = bugCommandFactory.create("ifEnemy", 10);
+        List<BugCommand> expected = Arrays.asList(
+                new BugCommand(null, BugMnemonic.IF_ENEMY, 10, null)
+        );
+        assertEquals(expected, res);
+    }
+    @Test
+    public void create_ifEnemy_shouldReturnBugCommandWithDefaultParameter(){
+        List<BugCommand> res = bugCommandFactory.create("ifEnemy", null);
+        List<BugCommand> expected = Arrays.asList(
+                new BugCommand(null, BugMnemonic.IF_ENEMY, 1, null)
+        );
+        assertEquals(expected, res);
+    }
+
+    @Test
+    public void create_goto_shouldReturnBugCommandWithoutTargetLabel(){
+        List<BugCommand> res = bugCommandFactory.create("goto");
+        List<BugCommand> expected = Arrays.asList(
+                new BugCommand(null, BugMnemonic.GOTO, null , null)
+        );
+        assertEquals(expected, res);
+    }
+
+    @Test
+    public void create_shouldThrowErrorIfCommandNotFound(){
+        // assert
+        InvalidInputException exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            bugCommandFactory.create("abc");
+        });
+        // assert
+        assertEquals("Invalid command: abc", exception.getMessage());
+
+        exception = assertThrows(InvalidInputException.class, () -> {
+            // act
+            bugCommandFactory.create("def");
+        });
+        // assert
+        assertEquals("Invalid command: def", exception.getMessage());
     }
 
 

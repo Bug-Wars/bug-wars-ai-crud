@@ -1,4 +1,5 @@
 package codecamp.bug.wars.ai.service.compiler.components;
+import codecamp.bug.wars.ai.exceptions.InvalidInputException;
 import codecamp.bug.wars.ai.service.compiler.models.BugCommand;
 import codecamp.bug.wars.ai.service.compiler.models.BugMnemonic;
 
@@ -56,6 +57,21 @@ public class BugCommandFactory {
                 if (parameter == null){ parameter = 1; }
                 result.add(new BugCommand(null, BugMnemonic.IF_WALL, parameter, null));
                 break;
+            case "ifFood":
+                if (parameter == null){ parameter = 1; }
+                result.add(new BugCommand(null, BugMnemonic.IF_FOOD, parameter, null));
+                break;
+            case "ifEnemy":
+                if (parameter == null){ parameter = 1; }
+                result.add(new BugCommand(null, BugMnemonic.IF_ENEMY, parameter, null));
+                break;
+            case "goto":
+                result.add(new BugCommand(null, BugMnemonic.GOTO, null, null));
+                break;
+            default:
+                throw new InvalidInputException("Invalid command: " + command);
+
+
         }
         return result;
     }
