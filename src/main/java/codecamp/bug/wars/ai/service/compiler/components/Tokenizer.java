@@ -8,7 +8,7 @@ public class Tokenizer {
     public List<LineOfTokens> tokenize(String script) {
         List<LineOfTokens> result = new ArrayList<>();
 
-        if (script == null || script.trim().equals("") || script.trim().startsWith("#")) {
+        if (script == null) {
             return result;
         }
 

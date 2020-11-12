@@ -4,8 +4,6 @@ import codecamp.bug.wars.ai.service.compiler.models.LineOfTokens;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.sound.sampled.Line;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
